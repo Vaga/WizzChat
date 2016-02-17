@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">WizzChat</string>
+
+    <!-- activity_login.xml -->
+    <string name="login_label_name">Name :</string>
+    <string name="login_label_email">Email :</string>
+    <string name="login_label_phone">Phone :</string>
+    <string name="login_button_register">Register</string>
+
 </resources>
