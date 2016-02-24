@@ -20,11 +20,11 @@
         android:id="@+id/linearLayout">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="76dp"
+            android:layout_height="103dp"
             android:id="@+id/imageView"
             android:layout_gravity="center_horizontal"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/big_logo" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,19 +52,6 @@
             android:inputType="textEmailAddress"
             android:ems="10"
             android:id="@+id/emailEditText" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/login_label_phone" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/phoneEditText" />
 
         <Button
             android:layout_width="wrap_content"

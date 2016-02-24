@@ -1,12 +1,16 @@
 package vaga.io.wizzchat;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -14,13 +18,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import io.realm.Realm;
+import vaga.io.wizzchat.models.Profile;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
     private EditText _nameEditText;
     private EditText _emailEditText;
-    private EditText _phoneEditText;
     private Button _registerButton;
 
     @Override
@@ -31,23 +37,77 @@ public class LoginActivity extends AppCompatActivity {
 
         _nameEditText = (EditText) findViewById(R.id.nameEditText);
         _emailEditText = (EditText) findViewById(R.id.emailEditText);
-        _phoneEditText = (EditText) findViewById(R.id.phoneEditText);
-
         _registerButton = (Button) findViewById(R.id.registerButton);
     }
 
     public void onRegister(View view) {
 
+        // Disable the register button
         _registerButton.setEnabled(false);
 
+        // The form is not valid
         if (!isValid()) {
-            Log.d(TAG, "No ! :(");
-        } else {
-            generateKeyPair();
-            Log.d(TAG, "Yes ! :)");
+            Toast.makeText(getBaseContext(), "Register failed", Toast.LENGTH_LONG).show();
+            _registerButton.setEnabled(true);
+            return;
         }
 
+        // Create a progress dialog
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppDialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Registering...");
+        progressDialog.show();
+
+        new Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+
+                        // Create the profile
+                        if (!onSuccess()) {
+                            Toast.makeText(getBaseContext(), "Internal error", Toast.LENGTH_LONG).show();
+                            // Hide the progress dialog
+                            progressDialog.dismiss();
+                            return;
+                        }
+
+                        // Hide the progress dialog
+                        progressDialog.dismiss();
+
+                        // Go to ListActivity
+                        Intent intent = new Intent(LoginActivity.this, ListActivity.class);
+                        LoginActivity.this.startActivity(intent);
+                        LoginActivity.this.finish();
+                    }
+                }, 3000);
+    }
+
+    private boolean onSuccess() {
+
+        // Retrieve informations
+        String name = _nameEditText.getText().toString();
+        String email = _emailEditText.getText().toString();
+
+        Realm realm = Realm.getInstance(LoginActivity.this.getApplicationContext());
+
+        realm.beginTransaction();
+
+        // Set the profile
+        Profile profile = realm.createObject(Profile.class);
+        profile.setName(name);
+        profile.setEmail(email);
+
+        // Generate the private and public key
+        boolean done = generateKeyPair(profile);
+
+        // Save the profile
+        if (done)
+            realm.commitTransaction();
+        else
+            realm.cancelTransaction();
+
         _registerButton.setEnabled(true);
+
+        return done;
     }
 
     private boolean isValid() {
@@ -56,7 +116,6 @@ public class LoginActivity extends AppCompatActivity {
 
         String name = _nameEditText.getText().toString();
         String email = _emailEditText.getText().toString();
-        String phone = _phoneEditText.getText().toString();
 
         // Name
         if (name.isEmpty() || name.length() < 4) {
@@ -74,18 +133,10 @@ public class LoginActivity extends AppCompatActivity {
             _emailEditText.setError(null);
         }
 
-        // Phone
-        if (phone.isEmpty() || !Patterns.PHONE.matcher(phone).matches()) {
-            _phoneEditText.setError("Enter a valid phone number");
-            valid = false;
-        } else {
-            _phoneEditText.setError(null);
-        }
-
         return valid;
     }
 
-    private boolean generateKeyPair() {
+    private boolean generateKeyPair(Profile profile) {
 
         try {
             KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
@@ -95,8 +146,8 @@ public class LoginActivity extends AppCompatActivity {
             PrivateKey privateKey = keypair.getPrivate();
             PublicKey publicKey = keypair.getPublic();
 
-            Log.d(TAG, "Public key : " + publicKey.toString());
-            Log.d(TAG, "Private key : " + privateKey.toString());
+            profile.setPublicKey(publicKey.toString());
+            profile.setPrivateKey(privateKey.toString());
         }
         catch(NoSuchAlgorithmException e) {
             Log.d(TAG, "Can't find algorithm", e);

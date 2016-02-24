@@ -7,4 +7,8 @@
     <string name="login_label_phone">Phone :</string>
     <string name="login_button_register">Register</string>
 
+    <!-- activity_list.xml -->
+    <string name="list_new_contact">New Contact</string>
+    <string name="list_my_identity">My identity</string>
+
 </resources>

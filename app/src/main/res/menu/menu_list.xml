@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/new_contact"
+        android:icon="@drawable/ic_person_add_24dp"
+        android:title="@string/list_new_contact"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/my_identity"
+        android:icon="@drawable/ic_person_24dp"
+        android:title="@string/list_my_identity"
+        app:showAsAction="never"/>
+
+</menu>
