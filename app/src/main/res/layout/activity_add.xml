@@ -40,9 +40,10 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
+                android:inputType="textPersonName"
                 android:ems="10"
-                android:id="@+id/editText" />
+                android:id="@+id/nameEditText"
+                android:singleLine="false" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -53,10 +54,9 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:ems="10"
-                android:id="@+id/editText3"
-                android:singleLine="false" />
+                android:id="@+id/emailEditText" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -68,18 +68,24 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:ems="10"
-                android:id="@+id/editText2" />
+                android:id="@+id/publicKeyEditText"
+                android:singleLine="false" />
 
-            <TableRow android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:gravity="center">
-                <Button android:layout_width="wrap_content"
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+                <Button
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Scan" android:width="100dip"></Button>
-                <Button android:layout_width="wrap_content"
-                    android:text="Add" android:layout_height="wrap_content"
-                    android:width="100dip"></Button>
+                    android:text="Scan"
+                    android:onClick="onScan" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:text="Add"
+                    android:layout_height="wrap_content" />
             </TableRow>
         </LinearLayout>
     </RelativeLayout>
