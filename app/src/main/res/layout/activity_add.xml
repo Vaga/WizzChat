@@ -81,11 +81,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Scan"
-                    android:onClick="onScan" />
+                    android:onClick="onScan"
+                    android:id="@+id/scanButton" />
                 <Button
                     android:layout_width="wrap_content"
                     android:text="Add"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:onClick="onAdd"
+                    android:id="@+id/addButton" />
             </TableRow>
         </LinearLayout>
     </RelativeLayout>

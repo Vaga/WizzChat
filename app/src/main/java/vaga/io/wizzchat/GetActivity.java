@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import io.realm.Realm;
 import vaga.io.wizzchat.models.Profile;
@@ -59,13 +60,15 @@ public class GetActivity extends AppCompatActivity {
     private void drawQRCode(Profile profile) {
 
         String url = "https://api.qrserver.com/v1/create-qr-code/?size=800x800&data=";
-        url += profile.getPublicKey();
+        String query = "{\"name\":\"" + profile.getName() + "\",";
+        query += "\"email\":\"" + profile.getEmail() + "\",";
+        query += "\"public_key\":\"" + profile.getPublicKey() + "\"}";
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
         try {
-            URL urlConnection = new URL(url);
+            URL urlConnection = new URL(url + URLEncoder.encode(query, "utf-8"));
             HttpURLConnection connection = (HttpURLConnection) urlConnection.openConnection();
             connection.setDoInput(true);
             connection.connect();
