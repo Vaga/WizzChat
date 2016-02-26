@@ -49,6 +49,16 @@ public class ListActivity extends AppCompatActivity {
             }
         });
 
+        _contactsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent intent = new Intent(ListActivity.this, RoomActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
