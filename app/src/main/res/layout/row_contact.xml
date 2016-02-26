@@ -4,30 +4,30 @@
     android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/faceImageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:scaleType="centerInside"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:contentDescription="Avatar"
-        android:src="@drawable/big_logo" />
+        android:src="@drawable/ic_person_24dp"
+        />
     <TextView
         android:id="@+id/nameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Fabien Casters"
-        android:layout_centerVertical="true"
+        android:layout_alignTop="@+id/faceImageView"
         android:layout_toRightOf="@+id/faceImageView"
-        android:layout_toEndOf="@+id/faceImageView" />
+        android:layout_toEndOf="@+id/faceImageView"
+        android:textStyle="bold" />
     <TextView
         android:id="@+id/dateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/activity_vertical_margin"
         android:text="Last message"
-        android:layout_below="@+id/nameTextView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignBottom="@+id/faceImageView"
+        android:layout_toRightOf="@+id/faceImageView"
+        android:layout_toEndOf="@+id/faceImageView" />
 </RelativeLayout>

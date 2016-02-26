@@ -1,5 +1,6 @@
 package vaga.io.wizzchat.adapters;
 
+import fr.tkeunebr.gravatar.Gravatar;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -113,6 +116,13 @@ public class ContactAdapter extends BaseAdapter {
         // Hydrate the view
         holder.nameTextView.setText(contact.getName());
         holder.dateTextView.setText(contact.getEmail());
+
+        // Add gravatar
+        String gravatarUrl = Gravatar.init().with(contact.getEmail()).force404().size(180).build();
+        Picasso.with(_context)
+                .load(gravatarUrl)
+                .error(_context.getDrawable(R.drawable.ic_person_24dp))
+                .into(holder.faceImageView);
 
         return convertView;
     }
