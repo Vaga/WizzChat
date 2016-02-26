@@ -1,11 +1,14 @@
 package vaga.io.wizzchat;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +26,8 @@ public class GetActivity extends AppCompatActivity {
     private TextView _nameTextView;
     private TextView _emailTextView;
     private ImageView _qrcodeImageView;
+
+    private Profile _profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +48,26 @@ public class GetActivity extends AppCompatActivity {
         Realm realm = Realm.getInstance(GetActivity.this.getApplicationContext());
 
         // Get the profile
-        Profile profile = realm.where(Profile.class).findFirst();
-        if (profile == null) {
+        _profile = realm.where(Profile.class).findFirst();
+        if (_profile == null) {
             Toast.makeText(getBaseContext(), "Internal error", Toast.LENGTH_LONG).show();
             return;
         }
 
         // Hydrate the view
-        _nameTextView.setText(profile.getName());
-        _emailTextView.setText(profile.getEmail());
+        _nameTextView.setText(_profile.getName());
+        _emailTextView.setText(_profile.getEmail());
 
-        drawQRCode(profile);
+        drawQRCode(_profile);
+    }
+
+    public void onPastePublicKey(View view) {
+
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("public_key", _profile.getPublicKey());
+        clipboard.setPrimaryClip(clip);
+
+        Toast.makeText(getBaseContext(), "Public key copied", Toast.LENGTH_LONG).show();
     }
 
     // TODO : Better way to retrieve the QRCode
