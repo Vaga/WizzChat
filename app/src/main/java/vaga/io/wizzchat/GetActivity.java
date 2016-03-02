@@ -40,7 +40,7 @@ public class GetActivity extends AppCompatActivity {
         _qrcodeImageView = (ImageView) findViewById(R.id.qrcodeImageView);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("My identity");
+        toolbar.setTitle(getResources().getString(R.string.title_get));
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -50,7 +50,7 @@ public class GetActivity extends AppCompatActivity {
         // Get the profile
         _profile = realm.where(Profile.class).findFirst();
         if (_profile == null) {
-            Toast.makeText(getBaseContext(), "Internal error", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), getResources().getString(R.string.internal_error), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -67,7 +67,7 @@ public class GetActivity extends AppCompatActivity {
         ClipData clip = ClipData.newPlainText("public_key", _profile.getPublicKey());
         clipboard.setPrimaryClip(clip);
 
-        Toast.makeText(getBaseContext(), "Public key copied", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), getResources().getString(R.string.public_key_copied), Toast.LENGTH_LONG).show();
     }
 
     // TODO : Better way to retrieve the QRCode

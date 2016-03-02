@@ -20,6 +20,7 @@ import java.security.PublicKey;
 
 import io.realm.Realm;
 import vaga.io.wizzchat.models.Profile;
+import vaga.io.wizzchat.services.RegistrationIntentService;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -47,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // The form is not valid
         if (!isValid()) {
-            Toast.makeText(getBaseContext(), "Register failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), getResources().getString(R.string.register_failed), Toast.LENGTH_LONG).show();
             _registerButton.setEnabled(true);
             return;
         }
@@ -55,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         // Create a progress dialog
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppDialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Registering...");
+        progressDialog.setMessage(getResources().getString(R.string.registering));
         progressDialog.show();
 
         new Handler().postDelayed(
@@ -64,11 +65,14 @@ public class LoginActivity extends AppCompatActivity {
 
                         // Create the profile
                         if (!onSuccess()) {
-                            Toast.makeText(getBaseContext(), "Internal error", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(), getResources().getString(R.string.internal_error), Toast.LENGTH_LONG).show();
                             // Hide the progress dialog
                             progressDialog.dismiss();
                             return;
                         }
+
+                        Intent service = new Intent(LoginActivity.this, RegistrationIntentService.class);
+                        startService(service);
 
                         // Hide the progress dialog
                         progressDialog.dismiss();
@@ -119,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Name
         if (name.isEmpty() || name.length() < 4) {
-            _nameEditText.setError("At least 4 characters");
+            _nameEditText.setError(getResources().getString(R.string.error_name));
             valid = false;
         } else {
             _nameEditText.setError(null);
@@ -127,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Email
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailEditText.setError("Enter a valid email address");
+            _emailEditText.setError(getResources().getString(R.string.error_email));
             valid = false;
         } else {
             _emailEditText.setError(null);

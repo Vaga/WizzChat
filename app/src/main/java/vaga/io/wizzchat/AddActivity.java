@@ -46,7 +46,7 @@ public class AddActivity extends AppCompatActivity {
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("New contact");
+        toolbar.setTitle(getResources().getString(R.string.title_add));
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -59,7 +59,11 @@ public class AddActivity extends AppCompatActivity {
             intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
             startActivityForResult(intent, 0);
         } catch (ActivityNotFoundException anfe) {
-            showDialog(AddActivity.this, "No Scanner Found", "Download a scanner code activity?", "Yes", "No").show();
+            showDialog(AddActivity.this,
+                    getResources().getString(R.string.no_scanner_found),
+                    getResources().getString(R.string.download_scanner),
+                    getResources().getString(R.string.yes),
+                    getResources().getString(R.string.no)).show();
         }
     }
 
@@ -70,7 +74,7 @@ public class AddActivity extends AppCompatActivity {
 
         // The form is not valid
         if (!isValid()) {
-            Toast.makeText(getBaseContext(), "Add failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), getResources().getString(R.string.add_failed), Toast.LENGTH_LONG).show();
             _addButton.setEnabled(true);
             _scanButton.setEnabled(true);
             return;
@@ -79,7 +83,7 @@ public class AddActivity extends AppCompatActivity {
         // Create a progress dialog
         final ProgressDialog progressDialog = new ProgressDialog(this, R.style.AppDialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Adding...");
+        progressDialog.setMessage(getResources().getString(R.string.adding));
         progressDialog.show();
 
         new Handler().postDelayed(
@@ -88,7 +92,7 @@ public class AddActivity extends AppCompatActivity {
 
                         // Create the profile
                         if (!onSuccess()) {
-                            Toast.makeText(getBaseContext(), "Internal error", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(), getResources().getString(R.string.internal_error), Toast.LENGTH_LONG).show();
                             // Hide the progress dialog
                             progressDialog.dismiss();
                             return;
@@ -129,7 +133,7 @@ public class AddActivity extends AppCompatActivity {
 
         // Name
         if (name.isEmpty() || name.length() < 4) {
-            _nameEditText.setError("At least 4 characters");
+            _nameEditText.setError(getResources().getString(R.string.error_name));
             valid = false;
         } else {
             _nameEditText.setError(null);
@@ -137,7 +141,7 @@ public class AddActivity extends AppCompatActivity {
 
         // Email
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailEditText.setError("Enter a valid email address");
+            _emailEditText.setError(getResources().getString(R.string.error_email));
             valid = false;
         } else {
             _emailEditText.setError(null);
@@ -145,7 +149,7 @@ public class AddActivity extends AppCompatActivity {
 
         // Public key
         if (publicKey.isEmpty() || publicKey.length() < 4) {
-            _publicKeyEditText.setError("At least 4 characters");
+            _publicKeyEditText.setError(getResources().getString(R.string.error_name));
             valid = false;
         } else {
             _publicKeyEditText.setError(null);
@@ -170,7 +174,7 @@ public class AddActivity extends AppCompatActivity {
                     _emailEditText.setText(contact.getString("email"));
                     _publicKeyEditText.setText(contact.getString("public_key"));
                 } catch(Exception e) {
-                    Toast.makeText(getBaseContext(), "It's not a JSON format...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.json_format), Toast.LENGTH_LONG).show();
                 }
 
             } else if (resultCode == RESULT_CANCELED) {

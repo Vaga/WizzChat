@@ -1,14 +1,42 @@
 <resources>
     <string name="app_name">WizzChat</string>
+    <string name="google_app_id">default-demo-app-1142</string>
+    <string name="gcm_defaultSenderId">40168069300</string>
+
+    <string name="title_add">New contact</string>
+    <string name="title_room">Room with </string>
+    <string name="title_contact">Contacts</string>
+    <string name="title_get">My identity</string>
 
     <!-- activity_login.xml -->
     <string name="login_label_name">Name :</string>
     <string name="login_label_email">Email :</string>
     <string name="login_label_phone">Phone :</string>
     <string name="login_button_register">Register</string>
+    <string name="register_failed">Register failed</string>
+    <string name="registering">Registering...</string>
 
     <!-- activity_list.xml -->
     <string name="list_new_contact">New Contact</string>
     <string name="list_my_identity">My identity</string>
+    <string name="are_you_sure">Are you sure ?</string>
+    <string name="remove_contact">Remove </string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!-- activity_add.xml -->
+    <string name="no_scanner_found">No scanner found !</string>
+    <string name="download_scanner">Download a scanner code activity ?</string>
+    <string name="add_failed">Add failed !</string>
+    <string name="adding">Adding...</string>
+    <string name="internal_error">Internal Error</string>
+    <string name="json_format">It\'s not a json format</string>
+
+    <!-- activity_get.xml -->
+    <string name="public_key_copied">Public key copied</string>
+
+    <!-- form errors -->
+    <string name="error_name">At least 4 characters</string>
+    <string name="error_email">Enter a valid email address</string>
 
 </resources>

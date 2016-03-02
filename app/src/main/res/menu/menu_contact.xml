@@ -3,14 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/contacts"
-        android:icon="@drawable/ic_action_users"
+        android:id="@+id/new_contact"
+        android:icon="@drawable/ic_person_add_24dp"
         android:title="@string/list_new_contact"
-        app:showAsAction="ifRoom"/>
-
-    <item android:id="@+id/my_identity"
-        android:icon="@drawable/ic_action_user"
-        android:title="@string/list_my_identity"
         app:showAsAction="ifRoom"/>
 
 </menu>
