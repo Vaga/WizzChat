@@ -13,16 +13,19 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 import cz.msebera.android.httpclient.Header;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import vaga.io.wizzchat.adapters.ContactAdapter;
 import vaga.io.wizzchat.adapters.MessageAdapter;
 import vaga.io.wizzchat.api.RestClient;
 import vaga.io.wizzchat.models.Contact;
+import vaga.io.wizzchat.models.Message;
 import vaga.io.wizzchat.models.Profile;
 import vaga.io.wizzchat.utils.RSA;
 
@@ -65,6 +68,11 @@ public class RoomActivity extends AppCompatActivity {
 
         _messageAdapter = new MessageAdapter(this, getLayoutInflater());
 
+        RealmResults<Message> messages = realm.where(Message.class).equalTo("to", id).findAll();
+        for (Message message : messages) {
+            _messageAdapter.addMessage(message);
+        }
+
         RestClient.getMessages(_to.getId(), _from.getId(), new JsonHttpResponseHandler() {
 
             @Override
@@ -73,14 +81,23 @@ public class RoomActivity extends AppCompatActivity {
                 Log.d(TAG, "GetMessages Array : " + response.toString());
 
                 for (int i = response.length() - 1; i >= 0; i--) {
+
                     try {
+
                         JSONObject message = response.getJSONObject(i);
                         String decryptedContent = RSA.decrypt(RoomActivity.this._from.getPrivateKey(), message.getString("data"));
-                        RoomActivity.this._messageAdapter.addMessage(decryptedContent);
+
+                        Message m = new Message();
+                        m.setContent(decryptedContent);
+                        m.setDate(message.getString("at"));
+                        m.setTo("");
+                        RoomActivity.this._messageAdapter.addMessage(m);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+                RoomActivity.this._messageAdapter.sort();
             }
 
             @Override
@@ -108,7 +125,21 @@ public class RoomActivity extends AppCompatActivity {
 
             _sendButton.setEnabled(false);
 
-            _messageAdapter.addMessage(content);
+            Realm realm = Realm.getInstance(this.getApplicationContext());
+
+            realm.beginTransaction();
+
+            // Add a message
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            Message message = realm.createObject(Message.class);
+            message.setContent(content);
+            message.setDate(dateFormat.format(new Date()));
+            message.setTo(_to.getId());
+
+            realm.commitTransaction();
+
+            _messageAdapter.addMessage(message);
 
             String encryptedContent;
 

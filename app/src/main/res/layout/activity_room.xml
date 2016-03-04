@@ -30,7 +30,8 @@
             android:layout_gravity="center_horizontal"
             android:stackFromBottom="true"
             android:transcriptMode="normal"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:divider="#00000000" />
 
 
         <LinearLayout
