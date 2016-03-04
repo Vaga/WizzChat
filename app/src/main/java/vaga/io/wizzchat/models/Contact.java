@@ -6,10 +6,19 @@ import io.realm.annotations.PrimaryKey;
 public class Contact extends RealmObject {
 
     @PrimaryKey
-    private String email;
+    private String id;
 
+    private String email;
     private String name;
     private String publicKey;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
 
     public void setName(String name) {
         this.name = name;

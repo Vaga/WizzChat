@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import io.realm.Realm;
 import vaga.io.wizzchat.models.Contact;
+import vaga.io.wizzchat.utils.Md5;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -117,6 +118,7 @@ public class AddActivity extends AppCompatActivity {
         contact.setName(_nameEditText.getText().toString());
         contact.setEmail(_emailEditText.getText().toString());
         contact.setPublicKey(_publicKeyEditText.getText().toString());
+        contact.setId(Md5.sum(contact.getPublicKey()));
 
         realm.commitTransaction();
 

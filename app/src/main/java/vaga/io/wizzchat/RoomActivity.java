@@ -24,6 +24,7 @@ import vaga.io.wizzchat.adapters.MessageAdapter;
 import vaga.io.wizzchat.api.RestClient;
 import vaga.io.wizzchat.models.Contact;
 import vaga.io.wizzchat.models.Profile;
+import vaga.io.wizzchat.utils.RSA;
 
 public class RoomActivity extends AppCompatActivity {
 
@@ -44,13 +45,13 @@ public class RoomActivity extends AppCompatActivity {
 
         // Retrieve email
         Bundle extras = getIntent().getExtras();
-        String email = extras.getString("email", "");
-        if (email.length() == 0)
+        String id = extras.getString("id", "");
+        if (id.length() == 0)
             finish();
 
         Realm realm = Realm.getInstance(this.getApplicationContext());
         _from = realm.where(Profile.class).findFirst();
-        _to = realm.where(Contact.class).equalTo("email", email).findFirst();
+        _to = realm.where(Contact.class).equalTo("id", id).findFirst();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.title_room) + " " + _to.getName());
@@ -64,7 +65,7 @@ public class RoomActivity extends AppCompatActivity {
 
         _messageAdapter = new MessageAdapter(this, getLayoutInflater());
 
-        RestClient.getMessages(_to.getPublicKey(), _from.getPublicKey(), new JsonHttpResponseHandler() {
+        RestClient.getMessages(_to.getId(), _from.getId(), new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -74,8 +75,9 @@ public class RoomActivity extends AppCompatActivity {
                 for (int i = response.length() - 1; i >= 0; i--) {
                     try {
                         JSONObject message = response.getJSONObject(i);
-                        RoomActivity.this._messageAdapter.addMessage(message.getString("data"));
-                    } catch (JSONException e) {
+                        String decryptedContent = RSA.decrypt(RoomActivity.this._from.getPrivateKey(), message.getString("data"));
+                        RoomActivity.this._messageAdapter.addMessage(decryptedContent);
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -108,7 +110,16 @@ public class RoomActivity extends AppCompatActivity {
 
             _messageAdapter.addMessage(content);
 
-            RestClient.postMessage(_from.getPublicKey(), _to.getPublicKey(), content, new JsonHttpResponseHandler() {
+            String encryptedContent;
+
+            try {
+                encryptedContent = RSA.encrypt(_to.getPublicKey(), content);
+            } catch(Exception e) {
+                //Error
+                return;
+            }
+
+            RestClient.postMessage(_from.getId(), _to.getId(), encryptedContent, new JsonHttpResponseHandler() {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

@@ -56,7 +56,7 @@ public class ListActivity extends AppCompatActivity {
                 Contact contact = (Contact) _contactAdapter.getItem(position);
 
                 Intent intent = new Intent(ListActivity.this, RoomActivity.class);
-                intent.putExtra("email", contact.getEmail());
+                intent.putExtra("id", contact.getId());
                 startActivity(intent);
             }
         });

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -21,6 +22,7 @@ import java.security.PublicKey;
 import io.realm.Realm;
 import vaga.io.wizzchat.models.Profile;
 import vaga.io.wizzchat.services.RegistrationIntentService;
+import vaga.io.wizzchat.utils.Md5;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -150,8 +152,12 @@ public class LoginActivity extends AppCompatActivity {
             PrivateKey privateKey = keypair.getPrivate();
             PublicKey publicKey = keypair.getPublic();
 
-            profile.setPublicKey(publicKey.toString());
-            profile.setPrivateKey(privateKey.toString());
+            Log.d(TAG, Base64.encodeToString(publicKey.getEncoded(), Base64.DEFAULT));
+            Log.d(TAG, Base64.encodeToString(privateKey.getEncoded(), Base64.DEFAULT));
+
+            profile.setPublicKey(Base64.encodeToString(publicKey.getEncoded(), Base64.DEFAULT));
+            profile.setPrivateKey(Base64.encodeToString(privateKey.getEncoded(), Base64.DEFAULT));
+            profile.setId(Md5.sum(profile.getPublicKey()));
         }
         catch(NoSuchAlgorithmException e) {
             Log.d(TAG, "Can't find algorithm", e);
