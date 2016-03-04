@@ -31,6 +31,7 @@ public class ContactActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact);
 
         _contactsListView = (ListView) findViewById(R.id.contactsListView);
+        _contactsListView.setEmptyView(findViewById(R.id.emptyStateViewStub));
         _contactAdapter = new ContactAdapter(this, getLayoutInflater());
 
         _contactsListView.setAdapter(_contactAdapter);
@@ -56,7 +57,7 @@ public class ContactActivity extends AppCompatActivity {
                 Contact contact = (Contact) _contactAdapter.getItem(position);
 
                 Intent intent = new Intent(ContactActivity.this, RoomActivity.class);
-                intent.putExtra("email", contact.getEmail());
+                intent.putExtra("id", contact.getId());
                 startActivity(intent);
             }
         });

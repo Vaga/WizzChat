@@ -63,6 +63,7 @@ public class RoomActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         _messagesListView = (ListView) findViewById(R.id.messagesListView);
+        _messagesListView.setEmptyView(findViewById(R.id.emptyStateViewStub));
         _contentEditText = (EditText) findViewById(R.id.contentEditText);
         _sendButton = (Button) findViewById(R.id.sendButton);
 

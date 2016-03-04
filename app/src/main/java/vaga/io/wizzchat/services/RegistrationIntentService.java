@@ -65,7 +65,6 @@ public class RegistrationIntentService extends IntentService {
         if (profile == null)
             return;
 
-        // TODO : send network request
         RestClient.addDevice(profile.getId(), token, new JsonHttpResponseHandler() {
 
             @Override

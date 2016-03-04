@@ -39,4 +39,7 @@
     <string name="error_name">At least 4 characters</string>
     <string name="error_email">Enter a valid email address</string>
 
+    <!-- empty_state -->
+    <string name="empty_state">Nothing to see here !</string>
+
 </resources>

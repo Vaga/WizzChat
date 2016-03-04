@@ -20,7 +20,9 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
-            android:id="@+id/dateTextView" />
+            android:id="@+id/dateTextView"
+            android:layout_gravity="right"
+            android:textSize="10sp" />
 
     </LinearLayout>
 </RelativeLayout>

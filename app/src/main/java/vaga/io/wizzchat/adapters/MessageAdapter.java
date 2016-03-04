@@ -1,6 +1,7 @@
 package vaga.io.wizzchat.adapters;
 
 import android.content.Context;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,12 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import fr.tkeunebr.gravatar.Gravatar;
 import io.realm.Realm;
@@ -100,8 +103,6 @@ public class MessageAdapter extends BaseAdapter {
         // Retrieve the message
         Message message = (Message) getItem(position);
 
-        //if (convertView == null) {
-
         if (message.getTo() == "")
             convertView = _layoutInflater.inflate(R.layout.row_message_other, null);
         else
@@ -112,15 +113,25 @@ public class MessageAdapter extends BaseAdapter {
         holder.dateTextView = (TextView) convertView.findViewById(R.id.dateTextView);
 
         convertView.setTag(holder);
-        //}
-        //else {
 
-        //    holder = (ViewHolder) convertView.getTag();
-        //}
+        String date = message.getDate();
+        try {
+
+            SimpleDateFormat GMTFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            GMTFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+            Date d = GMTFormat.parse(date);
+
+            DateFormat format = new SimpleDateFormat("HH:mm");
+            format.setTimeZone(TimeZone.getTimeZone(Time.getCurrentTimezone()));
+            date = format.format(d);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
         // Hydrate the view
         holder.contentTextView.setText(message.getContent());
-        holder.dateTextView.setText(message.getDate());
+        holder.dateTextView.setText(date);
 
         return convertView;
     }

@@ -44,6 +44,13 @@
                 android:value=".ListActivity" />
         </activity>
         <activity android:name=".RoomActivity">
+            <intent-filter>
+                <action android:name="OPEN_THREAD" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ListActivity" />
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ListActivity" />

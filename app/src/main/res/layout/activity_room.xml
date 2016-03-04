@@ -33,6 +33,13 @@
             android:layout_weight="1"
             android:divider="#00000000" />
 
+        <ViewStub
+            android:id="@+id/emptyStateViewStub"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout="@layout/empty_state" />
+
 
         <LinearLayout
             android:orientation="horizontal"

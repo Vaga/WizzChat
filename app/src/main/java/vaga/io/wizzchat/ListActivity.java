@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import vaga.io.wizzchat.adapters.ContactAdapter;
 import vaga.io.wizzchat.models.Contact;
@@ -31,6 +32,7 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
 
         _contactsListView = (ListView) findViewById(R.id.contactsListView);
+        _contactsListView.setEmptyView(findViewById(R.id.emptyStateViewStub));
         _contactAdapter = new ContactAdapter(this, getLayoutInflater());
 
         _contactsListView.setAdapter(_contactAdapter);
