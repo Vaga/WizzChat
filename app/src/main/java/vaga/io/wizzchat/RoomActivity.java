@@ -1,5 +1,9 @@
 package vaga.io.wizzchat;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +36,7 @@ import vaga.io.wizzchat.utils.RSA;
 public class RoomActivity extends AppCompatActivity {
 
     private static final String TAG = "RoomActivity";
+    public static final String NOTIFY_REFRESH_THREAD = "REFRESH_THREAD";
 
     private ListView _messagesListView;
     private EditText _contentEditText;
@@ -39,6 +44,8 @@ public class RoomActivity extends AppCompatActivity {
     private MessageAdapter _messageAdapter;
     private Profile _from;
     private Contact _to;
+
+    private BroadcastReceiver _broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +58,42 @@ public class RoomActivity extends AppCompatActivity {
         String id = extras.getString("id", "");
         if (id.length() == 0)
             finish();
+
+        _broadcastReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                Bundle bundle = intent.getExtras();
+                if (bundle == null)
+                    return;
+
+                String author = bundle.getString("author");
+                String content = bundle.getString("message");
+                String date = bundle.getString("date");
+
+                if (author.equals(RoomActivity.this._to.getId())) {
+
+                    try {
+
+                        String decryptedContent = RSA.decrypt(RoomActivity.this._from.getPrivateKey(), content);
+
+                        Message m = new Message();
+                        m.setContent(decryptedContent);
+                        m.setDate(date);
+                        m.setTo("");
+                        RoomActivity.this._messageAdapter.addMessage(m);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(NOTIFY_REFRESH_THREAD);
+        registerReceiver(_broadcastReceiver, filter);
 
         Realm realm = Realm.getInstance(this.getApplicationContext());
         _from = realm.where(Profile.class).findFirst();
@@ -118,6 +161,8 @@ public class RoomActivity extends AppCompatActivity {
         _messagesListView.setAdapter(_messageAdapter);
     }
 
+
+
     public void onSend(View view) {
 
         String content = _contentEditText.getText().toString();
@@ -183,5 +228,12 @@ public class RoomActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+        unregisterReceiver(_broadcastReceiver);
     }
 }
